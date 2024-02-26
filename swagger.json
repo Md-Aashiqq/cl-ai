@@ -1,104 +1,237 @@
 {
-  "openapi": "3.0.0",
+  "swagger": "2.0",
   "info": {
-    "title": "AI API",
-    "description": "API for AI services",
+    "title": "Models API",
+    "description": "Move your app forward with the Cl Models APIs",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://api.example.com"
-    }
+  "host": "api.cl.com",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/v1",
+  "produces": [
+    "application/json"
   ],
   "paths": {
-    "/text/analyze": {
-      "post": {
-        "summary": "Analyze Text",
-        "description": "Analyze text for sentiment and key entities",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "text": {
-                    "type": "string",
-                    "description": "Text to analyze"
-                  }
-                },
-                "required": ["text"]
-              }
-            }
+    "/products": {
+      "get": {
+        "summary": "Model Types",
+        "description": "The Model endpoint returns information about the Uber products offered at a given location. The response includes the display name and other details about each product, and lists the products in the proper display order.",
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Latitude component of location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Longitude component of location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
           }
-        },
+        ],
+        "tags": [
+          "Models"
+        ],
         "responses": {
           "200": {
-            "description": "Text analysis result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "sentiment": {
-                      "type": "string",
-                      "description": "Sentiment of the text"
-                    },
-                    "entities": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "description": "Key entities identified in the text"
-                    }
-                  }
-                }
+            "description": "An array of products",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
               }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         }
       }
     },
-    "/image/classify": {
-      "post": {
-        "summary": "Classify Image",
-        "description": "Classify an image into different categories",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "image": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "Image file to classify"
-                  }
-                },
-                "required": ["image"]
-              }
-            }
+    "/estimates/price": {
+      "get": {
+        "summary": "Price Estimates",
+        "description": "The Price Estimates endpoint returns an estimated price range for each product offered at a given location. The price estimate is provided as a formatted string with the full price range and the localized currency symbol.<br><br>The response also includes low and high estimates, and the [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) currency code for situations requiring currency conversion. When surge is active for a particular product, its surge_multiplier will be greater than 1, but the price estimate already factors in this multiplier.",
+        "parameters": [
+          {
+            "name": "start_latitude",
+            "in": "query",
+            "description": "Latitude component of start location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "start_longitude",
+            "in": "query",
+            "description": "Longitude component of start location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "end_latitude",
+            "in": "query",
+            "description": "Latitude component of end location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "end_longitude",
+            "in": "query",
+            "description": "Longitude component of end location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
           }
-        },
+        ],
+        "tags": [
+          "ASR"
+        ],
         "responses": {
           "200": {
-            "description": "Image classification result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "categories": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "description": "Categories of the image"
-                    }
-                  }
-                }
+            "description": "An array of price estimates by product",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PriceEstimate"
               }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/estimates/asr": {
+      "get": {
+        "summary": "ASR ",
+        "description": "Endpoint returns the text for audio stream  ",
+        "parameters": [
+          {
+            "name": "start_latitude",
+            "in": "query",
+            "description": "Latitude component of start location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "start_longitude",
+            "in": "query",
+            "description": "Longitude component of start location.",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "customer_uuid",
+            "in": "query",
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique customer identifier to be used for experience customization."
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "type": "string",
+            "description": "Unique identifier representing a specific product for a given latitude & longitude."
+          }
+        ],
+        "tags": [
+          "ASR"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of products",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "summary": "Image detection",
+        "description": "The Image detection endpoint returns information about the Uber user that has authorized with the application.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Image detection for an object",
+            "schema": {
+              "$ref": "#/definitions/Profile"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/history": {
+      "get": {
+        "summary": "User Activity",
+        "description": "The User Activity endpoint returns data about a user's lifetime activity with Uber. The response will include pickup locations and times, dropoff locations and times, the distance of past requests, and information about which products were requested.<br><br>The history array in the response will have a maximum length based on the limit parameter. The response value count may exceed limit, therefore subsequent API requests may be necessary.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "format": "int32",
+            "description": "Offset the list of returned results by this amount. Default is zero."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of items to retrieve. Default is 5, maximum is 100."
+          }
+        ],
+        "tags": [
+          "Image Detection"
+        ],
+        "responses": {
+          "200": {
+            "description": "History information for the given user",
+            "schema": {
+              "$ref": "#/definitions/Activities"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           }
         }
