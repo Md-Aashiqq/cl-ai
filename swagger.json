@@ -1,240 +1,205 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-    "title": "Models API",
-    "description": "Move your app forward with the Cl Models APIs",
+    "title": "AI Services API",
+    "description": "API for various AI services including image detection, sentiment analysis, text summarization, automatic speech recognition (ASR), and text-to-speech (TTS).",
     "version": "1.0.0"
   },
-  "host": "api.cl.com",
-  "schemes": [
-    "https"
-  ],
-  "basePath": "/v1",
-  "produces": [
-    "application/json"
+  "servers": [
+    {
+      "url": "http://api.example.com/v1"
+    }
   ],
   "paths": {
-    "/products": {
+    "/image/detection": {
       "get": {
-        "summary": "Model Types",
-        "description": "The Model endpoint returns information about the Uber products offered at a given location. The response includes the display name and other details about each product, and lists the products in the proper display order.",
-        "parameters": [
-          {
-            "name": "latitude",
-            "in": "query",
-            "description": "Latitude component of location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          },
-          {
-            "name": "longitude",
-            "in": "query",
-            "description": "Longitude component of location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          }
-        ],
-        "tags": [
-          "Models"
-        ],
+        "summary": "Get image detection results",
         "responses": {
           "200": {
-            "description": "An array of products",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Product"
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "summary": "Perform image detection",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageDetectionRequest"
               }
             }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
           }
         }
       }
     },
-    "/estimates/price": {
+    "/sentiment": {
       "get": {
-        "summary": "Price Estimates",
-        "description": "The Price Estimates endpoint returns an estimated price range for each product offered at a given location. The price estimate is provided as a formatted string with the full price range and the localized currency symbol.<br><br>The response also includes low and high estimates, and the [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) currency code for situations requiring currency conversion. When surge is active for a particular product, its surge_multiplier will be greater than 1, but the price estimate already factors in this multiplier.",
-        "parameters": [
-          {
-            "name": "start_latitude",
-            "in": "query",
-            "description": "Latitude component of start location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          },
-          {
-            "name": "start_longitude",
-            "in": "query",
-            "description": "Longitude component of start location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          },
-          {
-            "name": "end_latitude",
-            "in": "query",
-            "description": "Latitude component of end location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          },
-          {
-            "name": "end_longitude",
-            "in": "query",
-            "description": "Longitude component of end location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          }
-        ],
-        "tags": [
-          "ASR"
-        ],
+        "summary": "Get sentiment analysis results",
         "responses": {
           "200": {
-            "description": "An array of price estimates by product",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PriceEstimate"
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "summary": "Perform sentiment analysis",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SentimentAnalysisRequest"
               }
             }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
           }
         }
       }
     },
-    "/estimates/asr": {
+    "/summary": {
       "get": {
-        "summary": "ASR ",
-        "description": "Endpoint returns the text for audio stream  ",
-        "parameters": [
-          {
-            "name": "start_latitude",
-            "in": "query",
-            "description": "Latitude component of start location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          },
-          {
-            "name": "start_longitude",
-            "in": "query",
-            "description": "Longitude component of start location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          },
-          {
-            "name": "customer_uuid",
-            "in": "query",
+        "summary": "Get text summarization results",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "summary": "Perform text summarization",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TextSummarizationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/asr": {
+      "get": {
+        "summary": "Get automatic speech recognition results",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "summary": "Perform automatic speech recognition",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ASRRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/tts": {
+      "get": {
+        "summary": "Get text-to-speech results",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "summary": "Perform text-to-speech conversion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TTSRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ImageDetectionRequest": {
+        "type": "object",
+        "properties": {
+          "image": {
             "type": "string",
-            "format": "uuid",
-            "description": "Unique customer identifier to be used for experience customization."
-          },
-          {
-            "name": "product_id",
-            "in": "query",
+            "format": "binary"
+          }
+        },
+        "required": ["image"]
+      },
+      "SentimentAnalysisRequest": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": ["text"]
+      },
+      "TextSummarizationRequest": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": ["text"]
+      },
+      "ASRRequest": {
+        "type": "object",
+        "properties": {
+          "audio": {
             "type": "string",
-            "description": "Unique identifier representing a specific product for a given latitude & longitude."
+            "format": "binary"
           }
-        ],
-        "tags": [
-          "ASR"
-        ],
-        "responses": {
-          "200": {
-            "description": "An array of products",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Product"
-              }
-            }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
+        },
+        "required": ["audio"]
+      },
+      "TTSRequest": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
           }
-        }
-      }
-    },
-    "/me": {
-      "get": {
-        "summary": "Image detection",
-        "description": "The Image detection endpoint returns information about the Uber user that has authorized with the application.",
-        "tags": [
-          "User"
-        ],
-        "responses": {
-          "200": {
-            "description": "Image detection for an object",
-            "schema": {
-              "$ref": "#/definitions/Profile"
-            }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/history": {
-      "get": {
-        "summary": "User Activity",
-        "description": "The User Activity endpoint returns data about a user's lifetime activity with Uber. The response will include pickup locations and times, dropoff locations and times, the distance of past requests, and information about which products were requested.<br><br>The history array in the response will have a maximum length based on the limit parameter. The response value count may exceed limit, therefore subsequent API requests may be necessary.",
-        "parameters": [
-          {
-            "name": "offset",
-            "in": "query",
-            "type": "integer",
-            "format": "int32",
-            "description": "Offset the list of returned results by this amount. Default is zero."
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "type": "integer",
-            "format": "int32",
-            "description": "Number of items to retrieve. Default is 5, maximum is 100."
-          }
-        ],
-        "tags": [
-          "Image Detection"
-        ],
-        "responses": {
-          "200": {
-            "description": "History information for the given user",
-            "schema": {
-              "$ref": "#/definitions/Activities"
-            }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
+        },
+        "required": ["text"]
       }
     }
   }
