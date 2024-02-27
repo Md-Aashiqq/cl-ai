@@ -1,15 +1,16 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "AI Services API",
+    "title": "CirrusAI Services APIs",
     "description": "API for various AI services including image detection, sentiment analysis, text summarization, automatic speech recognition (ASR), and text-to-speech (TTS).",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://api.example.com/v1"
+      "url": "http://cirrusai.api.cirruslabs.io/v1"
     }
   ],
+  "basePath": "/v1",
   "paths": {
     "/image/detection": {
       "get": {
